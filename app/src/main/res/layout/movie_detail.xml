@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/gray"
+    android:padding="8dp"
+    tools:context=".view.MainActivity">
+
+    <RelativeLayout
+        android:id="@+id/rl_movie_cover"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/rl_movie_detail">
+
+        <ImageView
+            android:id="@+id/iv_cover"
+            android:layout_width="match_parent"
+            android:background="@color/white"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_movie_detail"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <LinearLayout
+            android:id="@+id/ll_title"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title"
+                android:textColor="@color/white"
+                android:textSize="@dimen/size_text_item" />
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hello World!"
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/size_text_item" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_desc"
+            android:layout_below="@id/ll_title"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/desc"
+                android:textColor="@color/white"
+                android:textSize="@dimen/size_text_item" />
+            <TextView
+                android:id="@+id/tv_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hello World!"
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/size_text_item" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_release"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/ll_desc"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/released"
+                android:textColor="@color/white"
+                android:textSize="@dimen/size_text_item" />
+            <TextView
+                android:id="@+id/tv_released"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hello World!"
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/size_text_item" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_runtime"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/ll_release"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/runtime"
+                android:textColor="@color/white"
+                android:textSize="@dimen/size_text_item" />
+            <TextView
+                android:id="@+id/tv_runtime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hello World!"
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/size_text_item" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_genre"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/ll_runtime"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/genre"
+                android:textColor="@color/white"
+                android:textSize="@dimen/size_text_item" />
+            <TextView
+                android:id="@+id/tv_genre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hello World!"
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/size_text_item" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_director"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/ll_genre"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/director"
+                android:textColor="@color/white"
+                android:textSize="@dimen/size_text_item" />
+            <TextView
+                android:id="@+id/tv_director"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hello World!"
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/size_text_item" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_writer"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/ll_director"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/writer"
+                android:textColor="@color/white"
+                android:textSize="@dimen/size_text_item" />
+            <TextView
+                android:id="@+id/tv_writer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hello World!"
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/size_text_item" />
+        </LinearLayout>
+
+    </RelativeLayout>
+</RelativeLayout>

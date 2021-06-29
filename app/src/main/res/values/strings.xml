@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Fortes Filmes</string>
+
+    <string name="title">Título:</string>
+    <string name="desc">Sinópse:</string>
+    <string name="released">Data de lançamento:</string>
+    <string name="runtime">Duração:</string>
+    <string name="genre">Gênero:</string>
+    <string name="director">Diretor:</string>
+    <string name="writer">Escritor:</string>
+</resources>
