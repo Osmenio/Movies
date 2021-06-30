@@ -1,5 +1,7 @@
 package com.fortesfilmes.view;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
@@ -13,7 +15,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -50,6 +54,9 @@ import retrofit2.Response;
 public class MoveDetail extends AppCompatActivity {
 
     //
+    private Toolbar toolbar;
+
+    //
     private RoomDB roomDB;
     private ExecutorService executor;
     private Handler handler;
@@ -73,6 +80,13 @@ public class MoveDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.movie_detail);
 
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(R.string.detail);
+//        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.primary)));
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(getResources().getString(R.string.color_primary))));
+
+//        setSupportActionBar(toolbar);
+
         roomDB = RoomDB.getInstance(getApplicationContext());
         executor = Executors.newSingleThreadExecutor();
         handler = new Handler(getApplicationContext().getMainLooper());
@@ -95,10 +109,11 @@ public class MoveDetail extends AppCompatActivity {
                 if (selectedMovie.isFavorite()) {
                     selectedMovie.setFavorite(false);
                     fabFavorite.setImageResource(R.mipmap.icon_heart);
-//            fabFavorite.setImageDrawable(getResources().getDrawable(R.mipmap.icon_heart_red));
+                    Toast.makeText(getApplicationContext(), "Filme removido dos favoritos", Toast.LENGTH_SHORT).show();
                 } else {
                     selectedMovie.setFavorite(true);
                     fabFavorite.setImageResource(R.mipmap.icon_heart_red);
+                    Toast.makeText(getApplicationContext(), "Filme adicionado aos favoritos", Toast.LENGTH_SHORT).show();
                 }
 
                 //
@@ -106,7 +121,7 @@ public class MoveDetail extends AppCompatActivity {
                     @Override
                     public void run() {
                         roomDB.movieDao().update(selectedMovie);
-                        printMsg("roomDB.update: " + selectedMovie.getTitle());
+//                        printMsg("roomDB.update: " + selectedMovie.getTitle());
 //                        handler.post(new Runnable() {
 //                            public void run() {
 //                                updateView(selectedMovie);

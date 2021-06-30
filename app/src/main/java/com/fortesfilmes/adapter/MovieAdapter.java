@@ -63,6 +63,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieHolder> {
     }
 
     public void updateList(List<MovieModel> list) {
+        int size  = movies.size();
+        movies.clear();
+        notifyItemRangeRemoved(0, size);
+
         movies.addAll(list);
         notifyItemInserted(getItemCount());
     }

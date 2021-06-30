@@ -1,6 +1,11 @@
 package com.fortesfilmes.view;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -9,7 +14,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.fortesfilmes.R;
@@ -20,6 +30,9 @@ import com.fortesfilmes.model.MovieModel;
 import com.fortesfilmes.service.RestApiInterface;
 import com.fortesfilmes.service.RestApiService;
 import com.fortesfilmes.service.RoomDB;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -42,7 +55,7 @@ import retrofit2.Response;
 //● Implementar testes unitários.
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     //    private Context context;
     public static final String ACTIVITY_DATA_MOVIE_TITLE = "ACTIVITY_DATA_MOVIE_TITLE";
@@ -53,19 +66,37 @@ public class MainActivity extends AppCompatActivity {
     private Button btnClick;
 
     //
-//    List<MovieModel> movieList = null;
-
+    private Toolbar toolbar;
     //
     private RoomDB roomDB;
     private ExecutorService executor;
     private Handler handler;
 
+    //
+    List<MovieModel> movieList = null;
+    private boolean isFavorite = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+//        setContentView(R.layout.activity_main);
+        setContentView(R.layout.dashboard);
 
-//        context = this;
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.home);
+        setSupportActionBar(toolbar);
+
+//        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        // DrawerLayout
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+////        context = this;
         roomDB = RoomDB.getInstance(getApplicationContext());
         executor = Executors.newSingleThreadExecutor();
         handler = new Handler(getApplicationContext().getMainLooper());
@@ -89,6 +120,77 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshDataView(isFavorite);
+    }
+
+    /**
+     *
+     */
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+
+            case R.id.nav_home:
+                toolbar.setTitle(R.string.home);
+                isFavorite = false;
+                refreshDataView(isFavorite);
+                break;
+
+            case R.id.nav_favorite:
+                toolbar.setTitle(R.string.favorite);
+                isFavorite = true;
+                refreshDataView(isFavorite);
+                break;
+
+            case R.id.nav_about:
+                Toast.makeText(getApplicationContext(), "nav_about", Toast.LENGTH_SHORT).show();
+                break;
+        }
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        //
+        SearchView mSearchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        mSearchView.setOnQueryTextListener(searchListener);
+        return true;
+    }
+
+
+    private SearchView.OnQueryTextListener searchListener = new SearchView.OnQueryTextListener() {
+        @Override
+        public boolean onQueryTextSubmit(String query) {
+            return false;
+        }
+
+        @Override
+        public boolean onQueryTextChange(String newText) {
+
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    List<MovieModel> list = roomDB.movieDao().searchByTitle(newText);
+                    handler.post(new Runnable() {
+                        public void run() {
+//                            if (list.size() > 0) {
+                            movieAdapter.updateList(list);
+                            Log.println(Log.ERROR, "searchByTitle: " + list.size(), "getAllMoviesFromServer");
+//                            }
+                        }
+                    });
+                }
+            });
+            return false;
+        }
+    };
 
     private void setupRecycler() {
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
@@ -99,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClickAdapterLintener(Object arg) {
                 MovieModel movie = (MovieModel) arg;
-                Toast.makeText(getApplicationContext(), "Movie: " + movie.getTitle(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "Movie: " + movie.getTitle(), Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(getApplicationContext(), MoveDetail.class);
                 intent.putExtra(ACTIVITY_DATA_MOVIE_TITLE, movie.getTitle());
@@ -123,7 +225,11 @@ public class MainActivity extends AppCompatActivity {
                     if (response.body() != null) {
                         Log.println(Log.ERROR, "MainActivity", "response.body()");
                         List<MovieModel> movieList = response.body();
-                        movieAdapter.updateList(movieList);
+                        //
+                        //
+                        //
+                        //
+//                        movieAdapter.updateList(movieList);
 
                         //
                         persistAllMovies(movieList);
@@ -157,11 +263,6 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
     public void persistAllMovies(List<MovieModel> movies) {
-
-//        for (MovieModel movie : movies) {
-//            roomDB.movieDao().persist(movie);
-//        }
-
         executor.execute(new Runnable() {
             @Override
             public void run() {
@@ -176,4 +277,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void refreshDataView(boolean isFavorite) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                if (isFavorite) {
+                    movieList = roomDB.movieDao().findAllFavorite();
+                } else {
+                    movieList = roomDB.movieDao().findAll();
+                }
+
+                handler.post(new Runnable() {
+                    public void run() {
+                        movieAdapter.updateList(movieList);
+                        Log.println(Log.ERROR, "refreshDataView: " + movieList.size(), "getAllMoviesFromServer");
+                    }
+                });
+            }
+        });
+    }
+
 }

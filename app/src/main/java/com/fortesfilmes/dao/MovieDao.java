@@ -17,8 +17,15 @@ public interface MovieDao {
     @Query("SELECT * FROM movie_model")
     List<MovieModel> findAll();
 
-    @Query("SELECT * FROM movie_model WHERE title LIKE :title")
+    @Query("SELECT * FROM movie_model WHERE title = :title")
     MovieModel findByTitle(String title);
+
+    @Query("SELECT * FROM movie_model WHERE title LIKE '%' || :title || '%'")
+    List<MovieModel> searchByTitle(String title);
+
+    @Query("SELECT * FROM movie_model WHERE favorite = 1")
+        // true = 1, false = 0
+    List<MovieModel> findAllFavorite();
 
     @Insert
     void persist(MovieModel movie) throws Exception;

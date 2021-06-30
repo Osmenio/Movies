@@ -1,5 +1,14 @@
 <resources>
     <string name="app_name">Fortes Filmes</string>
+    <string name="home">Filmes</string>
+    <string name="detail">Informações</string>
+    <string name="favorite">Favoritos</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+
+    <string name="color_primary">#C62828</string>
 
     <string name="title">Título:</string>
     <string name="desc">Sinópse:</string>
