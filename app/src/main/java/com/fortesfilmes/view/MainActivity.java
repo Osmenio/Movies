@@ -4,19 +4,28 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.fortesfilmes.R;
 import com.fortesfilmes.adapter.MovieAdapter;
+import com.fortesfilmes.dao.MovieDao;
 import com.fortesfilmes.interfaces.Interfaces;
 import com.fortesfilmes.model.MovieModel;
 import com.fortesfilmes.service.RestApiInterface;
 import com.fortesfilmes.service.RestApiService;
+import com.fortesfilmes.service.RoomDB;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -35,25 +44,49 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
+    //    private Context context;
+    public static final String ACTIVITY_DATA_MOVIE_TITLE = "ACTIVITY_DATA_MOVIE_TITLE";
+
     private MovieAdapter movieAdapter;
     private RecyclerView recyclerView;
 
     private Button btnClick;
+
+    //
+//    List<MovieModel> movieList = null;
+
+    //
+    private RoomDB roomDB;
+    private ExecutorService executor;
+    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+//        context = this;
+        roomDB = RoomDB.getInstance(getApplicationContext());
+        executor = Executors.newSingleThreadExecutor();
+        handler = new Handler(getApplicationContext().getMainLooper());
+
         recyclerView = (RecyclerView) findViewById(R.id.rv_movie_list);
         setupRecycler();
-//
-        getAllMovies();
 
-//        btnClick = (Button) findViewById(R.id.bt_click);
-//        btnClick.setOnClickListener(view -> {
-//            getAllMovies();
-//        });
+        btnClick = (Button) findViewById(R.id.bt_click);
+        btnClick.setOnClickListener(view -> {
+//            List<MovieModel> listDb = roomDB.movieDao().findAll();
+//            Toast.makeText(getApplicationContext(), "listDb: " + listDb.size(), Toast.LENGTH_SHORT).show();
+
+        });
+
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                getAllMoviesFromServer();
+                Log.println(Log.ERROR, "MainActivity", "getAllMoviesFromServer");
+            }
+        });
     }
 
 
@@ -66,25 +99,38 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClickAdapterLintener(Object arg) {
                 MovieModel movie = (MovieModel) arg;
-                Toast.makeText(getApplicationContext(),"Movie: " + movie.getTitle(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Movie: " + movie.getTitle(), Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(getApplicationContext(), MoveDetail.class);
+                intent.putExtra(ACTIVITY_DATA_MOVIE_TITLE, movie.getTitle());
+                startActivity(intent);
             }
         });
     }
 
 
-    public void getAllMovies() {
+    public void getAllMoviesFromServer() {
 
-        RestApiInterface service = RestApiService.createService(RestApiInterface.class);
-        Call<List<MovieModel>> call = service.getMovies();
+        RestApiInterface restApi = RestApiService.createService(RestApiInterface.class);
+        Call<List<MovieModel>> call = restApi.getMovies();
         call.enqueue(new Callback<List<MovieModel>>() {
             @Override
             public void onResponse(Call<List<MovieModel>> call, Response<List<MovieModel>> response) {
                 if (response.isSuccessful()) {
-                    List<MovieModel> movieList = response.body();
-
-                    if (movieList != null) {
+//                    List<MovieModel> movieList = response.body();
+//                    movieList = response.body();
+//                    if (movieList != null) {
+                    if (response.body() != null) {
+                        Log.println(Log.ERROR, "MainActivity", "response.body()");
+                        List<MovieModel> movieList = response.body();
                         movieAdapter.updateList(movieList);
+
+                        //
+                        persistAllMovies(movieList);
+//                        movieList = response.body();
+//                        movieAdapter.updateList(movieList);
                     } else {
+//                        movieList = null;
                         Toast.makeText(getApplicationContext(), "Resposta nula do servidor", Toast.LENGTH_SHORT).show();
                     }
                 } else {
@@ -98,6 +144,36 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Erro na chamada ao servidor", Toast.LENGTH_SHORT).show();
             }
         });
+    }
 
+//    public void persistMovie(MovieModel movie) {
+//        roomDB.movieDao().persist(movie);
+//    }
+//
+//    public void persistAllMovies(List<MovieModel> movies) {
+//        for (MovieModel movie : movies) {
+//            roomDB.movieDao().persist(movie);
+//        }
+//    }
+
+    public void persistAllMovies(List<MovieModel> movies) {
+
+//        for (MovieModel movie : movies) {
+//            roomDB.movieDao().persist(movie);
+//        }
+
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                for (MovieModel movie : movies) {
+                    try {
+                        roomDB.movieDao().persist(movie);
+                    } catch (Exception throwables) {
+                        Log.println(Log.ERROR, "SQLException", "movie: " + movie.getTitle());
+//                        throwables.printStackTrace();
+                    }
+                }
+            }
+        });
     }
 }

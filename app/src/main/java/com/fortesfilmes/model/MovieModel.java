@@ -1,23 +1,38 @@
 package com.fortesfilmes.model;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import java.util.Date;
 
+@Entity(tableName = "movie_model")
 public class MovieModel {
 
-    String title;
-    String year;
-    String rated;
-    String released;
-    String runtime;
-    String genre;
-    String director;
-    String writer;
-    String actors;
-    String plot;
-    String poster;
+//    @PrimaryKey(autoGenerate = true)
+//    public int id;
 
-    public MovieModel() {
-    }
+    @PrimaryKey(autoGenerate = false)
+    @NonNull
+    private String title;
+
+    private String year;
+    private String rated;
+    private String released;
+    private String runtime;
+    private String genre;
+    private String director;
+    private String writer;
+    private String actors;
+    private String plot;
+    private String poster;
+    private boolean favorite;
+
+//    @Ignore
+//    public MovieModel() {
+//    }
+
 
 //    public MovieModel(String title) {
 //        this.title = title;
@@ -110,5 +125,13 @@ public class MovieModel {
 
     public void setPoster(String poster) {
         this.poster = poster;
+    }
+
+    public Boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(Boolean favorite) {
+        this.favorite = favorite;
     }
 }
