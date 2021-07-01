@@ -8,8 +8,11 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -21,6 +24,8 @@ import android.widget.Toast;
 
 import com.fortesfilmes.R;
 import com.fortesfilmes.adapter.MovieAdapter;
+import com.fortesfilmes.dialog.ProgressDialog;
+import com.fortesfilmes.dialog.UserDialog;
 import com.fortesfilmes.interfaces.Interfaces;
 import com.fortesfilmes.model.MovieModel;
 import com.fortesfilmes.service.PreferenceService;
@@ -51,11 +56,12 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    //    private Context context;
     public static final String ACTIVITY_DATA_MOVIE_TITLE = "ACTIVITY_DATA_MOVIE_TITLE";
+    private Context context;
 
     private MovieAdapter movieAdapter;
     private RecyclerView recyclerView;
+    private SwipeRefreshLayout srlContainer;
 
 //    private Button btnClick;
 
@@ -70,6 +76,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     List<MovieModel> movieList = null;
     private boolean isFavorite = false;
     private boolean isSorted = false;
+
+    //
+    private UserDialog userDialog = null;
+    private ProgressDialog progressDialog = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,13 +101,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-////        context = this;
+        context = this;
         roomDB = RoomDB.getInstance(getApplicationContext());
         executor = Executors.newSingleThreadExecutor();
         handler = new Handler(getApplicationContext().getMainLooper());
 
         recyclerView = (RecyclerView) findViewById(R.id.rv_movie_list);
-        setupRecycler();
+        loadAdapter();
+        srlContainer = (SwipeRefreshLayout) findViewById(R.id.srl_container);
+        srlContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                checkData();
+                srlContainer.setRefreshing(false);
+            }
+        });
 
 //        btnClick = (Button) findViewById(R.id.bt_click);
 //        btnClick.setOnClickListener(view -> {
@@ -106,11 +124,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //
 //        });
 
+        checkData();
+    }
+
+    private void checkData() {
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                getAllMoviesFromServer();
-                Log.println(Log.ERROR, "MainActivity", "getAllMoviesFromServer");
+                List<MovieModel> movieList = roomDB.movieDao().findAll();
+                if (movieList.size() > 0) {
+                    refreshDataView(movieList);
+                } else {
+                    if (isNetworkConnected()) {
+                        handler.post(new Runnable() {
+                            public void run() {
+                                progressDialog = new ProgressDialog(context);
+                                progressDialog.setTextDialog("Carregando informações do servidor");
+                                progressDialog.show();
+                            }
+                        });
+                        getAllMoviesFromServer();
+                    } else {
+                        handler.post(new Runnable() {
+                            public void run() {
+                                userDialog = new UserDialog(context);
+                                userDialog.setTextDialog("O App precisa de conexão com internet");
+                                userDialog.setLabelPositiveButton("OK");
+                                userDialog.show();
+                            }
+                        });
+                    }
+                }
             }
         });
     }
@@ -118,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onResume() {
         super.onResume();
-        refreshDataView();
+        refreshDataView(null);
     }
 
     /**
@@ -131,17 +175,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_home:
                 toolbar.setTitle(R.string.home);
                 isFavorite = false;
-                refreshDataView();
+                refreshDataView(null);
                 break;
 
             case R.id.nav_favorite:
                 toolbar.setTitle(R.string.favorite);
                 isFavorite = true;
-                refreshDataView();
+                refreshDataView(null);
                 break;
 
             case R.id.nav_about:
-                Toast.makeText(getApplicationContext(), "nav_about", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "nav_about", Toast.LENGTH_SHORT).show();
                 break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -213,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     };
 
-    private void setupRecycler() {
+    private void loadAdapter() {
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         movieAdapter = new MovieAdapter(new ArrayList<>(0));
         recyclerView.setAdapter(movieAdapter);
@@ -222,7 +266,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClickAdapterLintener(Object arg) {
                 MovieModel movie = (MovieModel) arg;
-//                Toast.makeText(getApplicationContext(), "Movie: " + movie.getTitle(), Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(getApplicationContext(), MoveDetail.class);
                 intent.putExtra(ACTIVITY_DATA_MOVIE_TITLE, movie.getTitle());
@@ -240,16 +283,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onResponse(Call<List<MovieModel>> call, Response<List<MovieModel>> response) {
                 if (response.isSuccessful()) {
-//                    List<MovieModel> movieList = response.body();
-//                    movieList = response.body();
-//                    if (movieList != null) {
                     if (response.body() != null) {
-                        Log.println(Log.ERROR, "MainActivity", "response.body()");
+                        Log.println(Log.ERROR, "getAllMoviesFromServer", "response.body()");
                         List<MovieModel> movieList = response.body();
-                        refreshDataView();
-
                         //
                         persistAllMovies(movieList);
+                        //
+                        refreshDataView(movieList);
+                        progressDialog.finish();
                     } else {
 //                        movieList = null;
                         Toast.makeText(getApplicationContext(), "Resposta nula do servidor", Toast.LENGTH_SHORT).show();
@@ -267,16 +308,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-//    public void persistMovie(MovieModel movie) {
-//        roomDB.movieDao().persist(movie);
-//    }
-//
-//    public void persistAllMovies(List<MovieModel> movies) {
-//        for (MovieModel movie : movies) {
-//            roomDB.movieDao().persist(movie);
-//        }
-//    }
-
     public void persistAllMovies(List<MovieModel> movies) {
         executor.execute(new Runnable() {
             @Override
@@ -285,7 +316,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     try {
                         roomDB.movieDao().persist(movie);
                     } catch (Exception throwables) {
-                        Log.println(Log.ERROR, "SQLException", "movie: " + movie.getTitle());
+                        Log.println(Log.ERROR, "Exception", "Movie already exists into db: " + movie.getTitle());
 //                        throwables.printStackTrace();
                     }
                 }
@@ -293,24 +324,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-    public void refreshDataView() {
+    public void refreshDataView(List<MovieModel> list) {
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                if (isFavorite) {
-                    movieList = roomDB.movieDao().findAllFavorite();
+                if (list == null) {
+                    if (isFavorite) {
+                        movieList = roomDB.movieDao().findAllFavorite();
+                        Log.println(Log.ERROR, "refreshDataView: " + movieList.size(), "findAllFavorite");
+                    } else {
+                        movieList = roomDB.movieDao().findAll();
+                        Log.println(Log.ERROR, "refreshDataView: " + movieList.size(), "findAll");
+                    }
                 } else {
-                    movieList = roomDB.movieDao().findAll();
+                    movieList.clear();
+                    movieList.addAll(list);
                 }
 
                 handler.post(new Runnable() {
                     public void run() {
                         movieAdapter.updateList(movieList);
-                        Log.println(Log.ERROR, "refreshDataView: " + movieList.size(), "getAllMoviesFromServer");
+                        Log.println(Log.ERROR, "refreshDataView: " + movieList.size(), "updateList");
                     }
                 });
             }
         });
     }
 
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
+    }
 }

@@ -16,17 +16,25 @@
     <!--        app:layout_constraintTop_toTopOf="parent" />-->
 
     <!--    <android.support.v7.widget.RecyclerView-->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_movie_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
-<!--    <Button-->
-<!--        android:id="@+id/bt_click"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_margin="10dp"-->
-<!--        android:layout_alignParentBottom="true"-->
-<!--        android:text="Click"/>-->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/srl_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_movie_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <!--    <Button-->
+    <!--        android:id="@+id/bt_click"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_margin="10dp"-->
+    <!--        android:layout_alignParentBottom="true"-->
+    <!--        android:text="Click"/>-->
 
 </RelativeLayout>

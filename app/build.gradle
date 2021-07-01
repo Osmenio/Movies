@@ -39,6 +39,7 @@ dependencies {
 //    implementation 'com.android.support:design:+'
 
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
 
     // Rest
 //    implementation 'org.springframework.android:spring-android-rest-template:1.0.1.RELEASE'
