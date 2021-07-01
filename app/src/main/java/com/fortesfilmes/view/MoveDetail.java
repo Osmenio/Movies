@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -70,7 +71,9 @@ public class MoveDetail extends AppCompatActivity {
     private TextView tvGenre;
     private TextView tvDirector;
     private TextView tvWriter;
-    private FloatingActionButton fabFavorite;
+    private ImageView ivFavorite;
+    private RatingBar rbRating;
+//    private FloatingActionButton fabFavorite;
 
     //
     private MovieModel selectedMovie = null;
@@ -82,15 +85,14 @@ public class MoveDetail extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(R.string.detail);
-//        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.primary)));
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(getResources().getString(R.string.color_primary))));
 
-//        setSupportActionBar(toolbar);
-
+        //
         roomDB = RoomDB.getInstance(getApplicationContext());
         executor = Executors.newSingleThreadExecutor();
         handler = new Handler(getApplicationContext().getMainLooper());
 
+        //
         ivCover = (ImageView) findViewById(R.id.iv_cover);
         tvTitle = (TextView) findViewById(R.id.tv_title);
         tvDesc = (TextView) findViewById(R.id.tv_desc);
@@ -99,36 +101,33 @@ public class MoveDetail extends AppCompatActivity {
         tvGenre = (TextView) findViewById(R.id.tv_genre);
         tvDirector = (TextView) findViewById(R.id.tv_director);
         tvWriter = (TextView) findViewById(R.id.tv_writer);
-        fabFavorite = (FloatingActionButton) findViewById(R.id.fab_favorite);
-        fabFavorite.setOnClickListener(new View.OnClickListener() {
+        ivFavorite = (ImageView) findViewById(R.id.iv_favorite);
+        rbRating = (RatingBar) findViewById(R.id.rb_rating);
+
+
+        ivFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Log.println(Log.ERROR, "fabFavorite", "onClick");
                 //
                 if (selectedMovie.isFavorite()) {
                     selectedMovie.setFavorite(false);
-                    fabFavorite.setImageResource(R.mipmap.icon_heart);
+                    ivFavorite.setImageResource(R.mipmap.icon_heart);
                     Toast.makeText(getApplicationContext(), "Filme removido dos favoritos", Toast.LENGTH_SHORT).show();
                 } else {
                     selectedMovie.setFavorite(true);
-                    fabFavorite.setImageResource(R.mipmap.icon_heart_red);
+                    ivFavorite.setImageResource(R.mipmap.icon_heart_red);
                     Toast.makeText(getApplicationContext(), "Filme adicionado aos favoritos", Toast.LENGTH_SHORT).show();
                 }
-
                 //
-                executor.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        roomDB.movieDao().update(selectedMovie);
-//                        printMsg("roomDB.update: " + selectedMovie.getTitle());
-//                        handler.post(new Runnable() {
-//                            public void run() {
-//                                updateView(selectedMovie);
-//                            }
-//                        });
-                    }
-                });
+                updateMovie(selectedMovie);
+            }
+        });
+
+        rbRating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                selectedMovie.setRating(rating);
+                updateMovie(selectedMovie);
             }
         });
 
@@ -136,14 +135,8 @@ public class MoveDetail extends AppCompatActivity {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int height = (int) (displayMetrics.heightPixels * 0.8);
-//        int width = displayMetrics.widthPixels;
-
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, height);
         ivCover.setLayoutParams(layoutParams);
-
-//        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, height);
-//        ivCover.setLayoutParams(layoutParams);
-
 
         String movieTitle = getIntent().getExtras().getString(MainActivity.ACTIVITY_DATA_MOVIE_TITLE);
         if (movieTitle != null) {
@@ -182,13 +175,21 @@ public class MoveDetail extends AppCompatActivity {
         tvGenre.setText(movie.getGenre());
         tvDirector.setText(movie.getDirector());
         tvWriter.setText(movie.getWriter());
-        //
         if (movie.isFavorite()) {
-            fabFavorite.setImageResource(R.mipmap.icon_heart_red);
-//            fabFavorite.setImageDrawable(getResources().getDrawable(R.mipmap.icon_heart_red));
+            ivFavorite.setImageResource(R.mipmap.icon_heart_red);
         } else {
-            fabFavorite.setImageResource(R.mipmap.icon_heart);
+            ivFavorite.setImageResource(R.mipmap.icon_heart);
         }
+        rbRating.setRating(movie.getRating());
+    }
+
+    private void updateMovie(MovieModel movie) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                roomDB.movieDao().update(movie);
+            }
+        });
     }
 
     private void printMsg(String msg) {

@@ -29,14 +29,33 @@
                     android:layout_height="wrap_content"
                     android:background="@color/white" />
 
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/fab_favorite"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end|bottom"
-                    android:src="@mipmap/icon_heart"
-                    android:contentDescription="@string/app_name"
-                    android:layout_margin="16dp" />
+                <!--                <RelativeLayout-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_gravity="center|bottom"-->
+                <!--                    android:paddingHorizontal="20dp"-->
+                <!--                    android:orientation="horizontal">-->
+
+                <!--                    <RatingBar-->
+                <!--                        android:id="@+id/rtb"-->
+                <!--                        android:layout_width="wrap_content"-->
+                <!--                        android:layout_height="wrap_content"-->
+                <!--                        android:layout_gravity="center_vertical"-->
+                <!--                        android:numStars="5"-->
+                <!--                        android:progressTint="#FFC107"-->
+                <!--                        android:secondaryProgressTint="#FFEB3B"-->
+                <!--                        android:stepSize="0.1" />-->
+
+                <!--                    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+                <!--                        android:id="@+id/fab_favorite"-->
+                <!--                        android:layout_width="wrap_content"-->
+                <!--                        android:layout_height="wrap_content"-->
+                <!--                        android:layout_gravity="center_vertical"-->
+                <!--                        android:layout_alignParentRight="true"-->
+                <!--                        android:layout_margin="0dp"-->
+                <!--                        android:contentDescription="@string/app_name"-->
+                <!--                        android:src="@mipmap/icon_heart" />-->
+                <!--                </RelativeLayout>-->
             </FrameLayout>
 
             <RelativeLayout
@@ -53,6 +72,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -62,15 +82,46 @@
                         android:layout_marginLeft="5dp"
                         android:text="Hello World!"
                         android:textColor="@color/text_secondary"
-                        android:textSize="@dimen/size_text_title" />
+                        android:textSize="@dimen/size_text_bigtitle" />
                 </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl_ratingbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/ll_title"
+                    android:layout_marginTop="10dp"
+                    android:paddingHorizontal="0dp">
+
+                    <RatingBar
+                        android:id="@+id/rb_rating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scaleX=".7"
+                        android:scaleY=".7"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical"
+                        android:numStars="5"
+                        android:theme="@style/RatingBar"
+                        android:stepSize="0.5" />
+
+                    <ImageView
+                        android:id="@+id/iv_favorite"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="20dp"
+                        android:padding="10dp"
+                        android:src="@mipmap/icon_heart" />
+                </RelativeLayout>
 
                 <LinearLayout
                     android:id="@+id/ll_desc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/ll_title"
-                    android:layout_marginTop="10dp"
+                    android:layout_below="@id/rl_ratingbar"
+                    android:layout_marginTop="0dp"
                     android:orientation="vertical">
 
                     <TextView

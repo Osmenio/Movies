@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_pressed="true">
+        <shape>
+<!--            <solid android:color="@color/gray_dark" />-->
+
+            <corners android:bottomLeftRadius="@dimen/size_corners" android:bottomRightRadius="@dimen/size_corners" android:topLeftRadius="@dimen/size_corners" android:topRightRadius="@dimen/size_corners" />
+
+        </shape>
+    </item>
+    <item android:state_focused="true">
+        <shape>
+<!--            <solid android:color="@color/gray_dark" />-->
+
+            <corners android:bottomLeftRadius="@dimen/size_corners" android:bottomRightRadius="@dimen/size_corners" android:topLeftRadius="@dimen/size_corners" android:topRightRadius="@dimen/size_corners" />
+
+        </shape>
+    </item>
+    <item>
+        <shape>
+<!--            <solid android:color="@color/gray_dark" />-->
+
+            <corners android:bottomLeftRadius="@dimen/size_corners" android:bottomRightRadius="@dimen/size_corners" android:topLeftRadius="@dimen/size_corners" android:topRightRadius="@dimen/size_corners" />
+
+        </shape>
+    </item>
+    <!--<item android:drawable="@color/DashBlueColor" android:state_focused="true" />-->
+    <!--<item android:drawable="@color/DashBlueColor" />-->
+
+</selector>

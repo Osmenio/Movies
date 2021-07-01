@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray_light"
+    android:background="@color/gray_dark"
     tools:context=".view.MainActivity">
 
     <!--    <androidx.appcompat.widget.Toolbar-->
@@ -21,12 +21,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <Button
-        android:id="@+id/bt_click"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:layout_alignParentBottom="true"
-        android:text="Click"/>
+<!--    <Button-->
+<!--        android:id="@+id/bt_click"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_margin="10dp"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:text="Click"/>-->
 
 </RelativeLayout>

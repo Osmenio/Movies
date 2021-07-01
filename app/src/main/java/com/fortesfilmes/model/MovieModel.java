@@ -28,6 +28,7 @@ public class MovieModel {
     private String plot;
     private String poster;
     private boolean favorite;
+    private float rating;
 
 //    @Ignore
 //    public MovieModel() {
@@ -133,5 +134,13 @@ public class MovieModel {
 
     public void setFavorite(Boolean favorite) {
         this.favorite = favorite;
+    }
+
+    public float getRating() {
+        return rating;
+    }
+
+    public void setRating(float rating) {
+        this.rating = rating;
     }
 }

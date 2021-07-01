@@ -9,7 +9,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,24 +16,19 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.fortesfilmes.R;
 import com.fortesfilmes.adapter.MovieAdapter;
-import com.fortesfilmes.dao.MovieDao;
 import com.fortesfilmes.interfaces.Interfaces;
 import com.fortesfilmes.model.MovieModel;
+import com.fortesfilmes.service.PreferenceService;
 import com.fortesfilmes.service.RestApiInterface;
 import com.fortesfilmes.service.RestApiService;
 import com.fortesfilmes.service.RoomDB;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -63,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private MovieAdapter movieAdapter;
     private RecyclerView recyclerView;
 
-    private Button btnClick;
+//    private Button btnClick;
 
     //
     private Toolbar toolbar;
@@ -75,12 +69,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //
     List<MovieModel> movieList = null;
     private boolean isFavorite = false;
+    private boolean isSorted = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_main);
-        setContentView(R.layout.dashboard);
+        setContentView(R.layout.drawer_layout_main);
 
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.home);
@@ -104,12 +99,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         recyclerView = (RecyclerView) findViewById(R.id.rv_movie_list);
         setupRecycler();
 
-        btnClick = (Button) findViewById(R.id.bt_click);
-        btnClick.setOnClickListener(view -> {
-//            List<MovieModel> listDb = roomDB.movieDao().findAll();
-//            Toast.makeText(getApplicationContext(), "listDb: " + listDb.size(), Toast.LENGTH_SHORT).show();
-
-        });
+//        btnClick = (Button) findViewById(R.id.bt_click);
+//        btnClick.setOnClickListener(view -> {
+////            List<MovieModel> listDb = roomDB.movieDao().findAll();
+////            Toast.makeText(getApplicationContext(), "listDb: " + listDb.size(), Toast.LENGTH_SHORT).show();
+//
+//        });
 
         executor.execute(new Runnable() {
             @Override
@@ -123,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onResume() {
         super.onResume();
-        refreshDataView(isFavorite);
+        refreshDataView();
     }
 
     /**
@@ -136,13 +131,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_home:
                 toolbar.setTitle(R.string.home);
                 isFavorite = false;
-                refreshDataView(isFavorite);
+                refreshDataView();
                 break;
 
             case R.id.nav_favorite:
                 toolbar.setTitle(R.string.favorite);
                 isFavorite = true;
-                refreshDataView(isFavorite);
+                refreshDataView();
                 break;
 
             case R.id.nav_about:
@@ -159,11 +154,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
         //
-        SearchView mSearchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        SearchView mSearchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
         mSearchView.setOnQueryTextListener(searchListener);
+
+        //
+        isSorted = PreferenceService.getInstance(getApplicationContext()).getSortConfig();
+        MenuItem menuItem = (MenuItem) menu.findItem(R.id.menu_sort);
+        if (isSorted) {
+            menuItem.setIcon(R.drawable.icon_sort_list);
+        } else {
+            menuItem.setIcon(R.drawable.icon_sort);
+        }
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_sort:
+                if (isSorted) {
+                    isSorted = false;
+                    item.setIcon(R.drawable.icon_sort);
+                } else {
+                    isSorted = true;
+                    item.setIcon(R.drawable.icon_sort_list);
+                }
+                PreferenceService.getInstance(getApplicationContext()).setSortConfig(isSorted);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     private SearchView.OnQueryTextListener searchListener = new SearchView.OnQueryTextListener() {
         @Override
@@ -225,16 +246,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     if (response.body() != null) {
                         Log.println(Log.ERROR, "MainActivity", "response.body()");
                         List<MovieModel> movieList = response.body();
-                        //
-                        //
-                        //
-                        //
-//                        movieAdapter.updateList(movieList);
+                        refreshDataView();
 
                         //
                         persistAllMovies(movieList);
-//                        movieList = response.body();
-//                        movieAdapter.updateList(movieList);
                     } else {
 //                        movieList = null;
                         Toast.makeText(getApplicationContext(), "Resposta nula do servidor", Toast.LENGTH_SHORT).show();
@@ -278,7 +293,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-    public void refreshDataView(boolean isFavorite) {
+    public void refreshDataView() {
         executor.execute(new Runnable() {
             @Override
             public void run() {

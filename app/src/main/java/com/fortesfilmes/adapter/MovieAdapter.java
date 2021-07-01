@@ -39,10 +39,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieHolder> {
     public void onBindViewHolder(@NonNull MovieHolder holder, int position) {
         holder.title.setText(movies.get(position).getTitle());
         holder.year.setText(movies.get(position).getYear());
-
-//        Bitmap myImg = BitmapFactory.decodeFile(movies.get(position).getPoster());
-//        holder.poster.setImageBitmap(myImg);
-
+        holder.rbRating.setRating(movies.get(position).getRating());
         Picasso.get()
                 .load(movies.get(position).getPoster())
                 .fit().centerCrop()

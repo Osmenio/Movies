@@ -14,6 +14,7 @@
     <color name="primary_dark">#8E0000</color>
     <color name="primary_light">#FF5F52</color>
     <color name="gray_light">#DDD</color>
+    <color name="gray_dark">#222</color>
 
     <color name="text_primary">#FFF</color>
     <color name="text_secondary">#111</color>

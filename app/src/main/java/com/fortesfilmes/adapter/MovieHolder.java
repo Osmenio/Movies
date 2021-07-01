@@ -3,6 +3,7 @@ package com.fortesfilmes.adapter;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,15 +24,16 @@ public class MovieHolder extends RecyclerView.ViewHolder {
     public FrameLayout frame;
     public TextView title;
     public TextView year;
-    public TextView rated;
-    public TextView released;
-    public TextView runtime;
-    public TextView genre;
-    public TextView director;
-    public TextView writer;
-    public TextView actors;
-    public TextView plot;
+    //    public TextView rated;
+//    public TextView released;
+//    public TextView runtime;
+//    public TextView genre;
+//    public TextView director;
+//    public TextView writer;
+//    public TextView actors;
+//    public TextView plot;
     public ImageView poster;
+    public RatingBar rbRating;
 
     public MovieHolder(@NonNull View itemView) {
         super(itemView);
@@ -39,5 +41,6 @@ public class MovieHolder extends RecyclerView.ViewHolder {
         title = (TextView) itemView.findViewById(R.id.tv_title);
         year = (TextView) itemView.findViewById(R.id.tv_date);
         poster = (ImageView) itemView.findViewById(R.id.iv_cover);
+        rbRating = (RatingBar) itemView.findViewById(R.id.rb_rating);
     }
 }
