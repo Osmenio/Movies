@@ -5,6 +5,7 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import java.util.Comparator;
 import java.util.Date;
 
 @Entity(tableName = "movie_model")
@@ -143,4 +144,30 @@ public class MovieModel {
     public void setRating(float rating) {
         this.rating = rating;
     }
+
+    //
+    public static Comparator<MovieModel> titleAsc = new Comparator<MovieModel>() {
+        public int compare(MovieModel movie1, MovieModel movie2) {
+            return movie1.getTitle().compareTo(movie2.getTitle());
+        }
+    };
+    //
+    public static Comparator<MovieModel> titleDesc = new Comparator<MovieModel>() {
+        public int compare(MovieModel movie1, MovieModel movie2) {
+            return movie2.getTitle().compareTo(movie1.getTitle());
+        }
+    };
+    //
+    public static Comparator<MovieModel> ratingDesc = new Comparator<MovieModel>() {
+        public int compare(MovieModel movie1, MovieModel movie2) {
+//            return movie2.getRating().compareTo(movie1.getRating());
+            return Float.compare(movie2.getRating(), movie1.getRating());
+        }
+    };
+    //
+    public static Comparator<MovieModel> ratingAsc = new Comparator<MovieModel>() {
+        public int compare(MovieModel movie1, MovieModel movie2) {
+            return Float.compare(movie1.getRating(), movie2.getRating());
+        }
+    };
 }

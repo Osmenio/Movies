@@ -1,0 +1,107 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/icon_sort_list"
+            android:backgroundTint="@color/black" />
+
+        <TextView
+            android:id="@+id/dialog_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="Ordenar"
+            android:textColor="@color/black"
+            android:textSize="@dimen/size_text_title"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@color/gray" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:orientation="vertical">
+
+        <!--        <RadioGroup-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content">-->
+
+        <CheckBox
+            android:id="@+id/cb_title_asc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/gray_dark"
+            android:text="Nome: A -> Z"
+            android:textColor="@color/gray_dark" />
+
+        <CheckBox
+            android:id="@+id/cb_title_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/gray_dark"
+            android:text="Nome: Z -> A"
+            android:textColor="@color/gray_dark" />
+
+        <CheckBox
+            android:id="@+id/cb_rating_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/gray_dark"
+            android:text="Maior avaliação"
+            android:textColor="@color/gray_dark" />
+
+        <CheckBox
+            android:id="@+id/cb_rating_asc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/gray_dark"
+            android:text="Menor avaliação"
+            android:textColor="@color/gray_dark" />
+        <!--        </RadioGroup>-->
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/btn_apply"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="Aplicar"
+            android:textColor="@color/black"
+            android:textSize="@dimen/size_text_button"
+            android:textStyle="italic|bold" />
+
+    </LinearLayout>
+
+</LinearLayout>

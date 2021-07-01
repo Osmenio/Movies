@@ -3,16 +3,18 @@ package com.fortesfilmes.service;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.fortesfilmes.enumeration.SortEnum;
+
 public class PreferenceService {
 
 
     private static PreferenceService INSTANCE;
-    private static Context context;
+//    private static Context context;
 
     private static SharedPreferences sharedpreferences;
 
     private static final String PREFERENCES = "FORTES_MOVIES";
-    private static final String SORT_CONFIG = "SORTED";
+    private static final String SORT_CONFIG = "SORT_CONFIG";
 
     public static PreferenceService getInstance(Context context) {
         if (INSTANCE == null) {
@@ -22,19 +24,14 @@ public class PreferenceService {
         return INSTANCE;
     }
 
-//    public void init(Context context) {
-////        PreferenceService.context = context;
-////        sharedpreferences = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
-//        sharedpreferences = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
-//    }
-
-    public void setSortConfig(boolean sorted) {
+    public void setSortConfig(SortEnum sorted) {
         SharedPreferences.Editor editor = sharedpreferences.edit();
-        editor.putBoolean(SORT_CONFIG, sorted);
+        editor.putInt(SORT_CONFIG, sorted.getValue());
         editor.commit();
     }
 
-    public boolean getSortConfig() {
-        return sharedpreferences.getBoolean(SORT_CONFIG, false);
+    public SortEnum getSortConfig() {
+        int sort = sharedpreferences.getInt(SORT_CONFIG, SortEnum.NONE.getValue());
+        return SortEnum.getEnum(sort);
     }
 }

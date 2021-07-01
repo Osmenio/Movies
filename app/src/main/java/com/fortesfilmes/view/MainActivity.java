@@ -25,7 +25,9 @@ import android.widget.Toast;
 import com.fortesfilmes.R;
 import com.fortesfilmes.adapter.MovieAdapter;
 import com.fortesfilmes.dialog.ProgressDialog;
+import com.fortesfilmes.dialog.SortDialog;
 import com.fortesfilmes.dialog.UserDialog;
+import com.fortesfilmes.enumeration.SortEnum;
 import com.fortesfilmes.interfaces.Interfaces;
 import com.fortesfilmes.model.MovieModel;
 import com.fortesfilmes.service.PreferenceService;
@@ -35,6 +37,7 @@ import com.fortesfilmes.service.RoomDB;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -76,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     List<MovieModel> movieList = null;
     private boolean isFavorite = false;
     private boolean isSorted = false;
+//    private SortEnum selectedSort = SortEnum.NONE;
 
     //
     private UserDialog userDialog = null;
@@ -127,6 +131,126 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         checkData();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshDataView(null);
+    }
+
+    /**
+     *
+     */
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+
+            case R.id.nav_home:
+                toolbar.setTitle(R.string.home);
+                isFavorite = false;
+                refreshDataView(null);
+                break;
+
+            case R.id.nav_favorite:
+                toolbar.setTitle(R.string.favorite);
+                isFavorite = true;
+                refreshDataView(null);
+                break;
+
+            case R.id.nav_sort:
+
+                SortEnum sortConfig = PreferenceService.getInstance(getApplicationContext()).getSortConfig();
+                SortDialog sortDialog = new SortDialog(context);
+                sortDialog.setSelectedSort(sortConfig);
+                sortDialog.setOnClickListener(new Interfaces.OnClickListener() {
+                    @Override
+                    public void onClickListenerCallback(Object arg) {
+                        SortEnum sortEnum = (SortEnum) arg;
+                        PreferenceService.getInstance(getApplicationContext()).setSortConfig(sortEnum);
+                        refreshDataView(null);
+                    }
+                });
+                sortDialog.show();
+                break;
+
+            case R.id.nav_about:
+//                Toast.makeText(getApplicationContext(), "nav_about", Toast.LENGTH_SHORT).show();
+                break;
+        }
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        //
+        SearchView mSearchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+        mSearchView.setOnQueryTextListener(searchListener);
+        return true;
+    }
+
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.menu_sort:
+//                if (isSorted) {
+//                    isSorted = false;
+//                    item.setIcon(R.drawable.icon_sort);
+//                } else {
+//                    isSorted = true;
+//                    item.setIcon(R.drawable.icon_sort_list);
+//                }
+//                PreferenceService.getInstance(getApplicationContext()).setSortConfig(isSorted);
+//                return true;
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
+//    }
+
+    private SearchView.OnQueryTextListener searchListener = new SearchView.OnQueryTextListener() {
+        @Override
+        public boolean onQueryTextSubmit(String query) {
+            return false;
+        }
+
+        @Override
+        public boolean onQueryTextChange(String newText) {
+
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    List<MovieModel> list = roomDB.movieDao().searchByTitle(newText);
+                    handler.post(new Runnable() {
+                        public void run() {
+                            movieAdapter.updateList(list);
+                            Log.println(Log.ERROR, "searchByTitle: " + list.size(), "getAllMoviesFromServer");
+                        }
+                    });
+                }
+            });
+            return false;
+        }
+    };
+
+    private void loadAdapter() {
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        movieAdapter = new MovieAdapter(new ArrayList<>(0));
+        recyclerView.setAdapter(movieAdapter);
+
+        movieAdapter.setOnClickListener(new Interfaces.OnClickAdapter() {
+            @Override
+            public void onClickAdapterLintener(Object arg) {
+                MovieModel movie = (MovieModel) arg;
+
+                Intent intent = new Intent(getApplicationContext(), MoveDetail.class);
+                intent.putExtra(ACTIVITY_DATA_MOVIE_TITLE, movie.getTitle());
+                startActivity(intent);
+            }
+        });
+    }
+
     private void checkData() {
         executor.execute(new Runnable() {
             @Override
@@ -158,122 +282,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        refreshDataView(null);
-    }
-
-    /**
-     *
-     */
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-
-            case R.id.nav_home:
-                toolbar.setTitle(R.string.home);
-                isFavorite = false;
-                refreshDataView(null);
-                break;
-
-            case R.id.nav_favorite:
-                toolbar.setTitle(R.string.favorite);
-                isFavorite = true;
-                refreshDataView(null);
-                break;
-
-            case R.id.nav_about:
-//                Toast.makeText(getApplicationContext(), "nav_about", Toast.LENGTH_SHORT).show();
-                break;
-        }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-        //
-        SearchView mSearchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
-        mSearchView.setOnQueryTextListener(searchListener);
-
-        //
-        isSorted = PreferenceService.getInstance(getApplicationContext()).getSortConfig();
-        MenuItem menuItem = (MenuItem) menu.findItem(R.id.menu_sort);
-        if (isSorted) {
-            menuItem.setIcon(R.drawable.icon_sort_list);
-        } else {
-            menuItem.setIcon(R.drawable.icon_sort);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_sort:
-                if (isSorted) {
-                    isSorted = false;
-                    item.setIcon(R.drawable.icon_sort);
-                } else {
-                    isSorted = true;
-                    item.setIcon(R.drawable.icon_sort_list);
-                }
-                PreferenceService.getInstance(getApplicationContext()).setSortConfig(isSorted);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private SearchView.OnQueryTextListener searchListener = new SearchView.OnQueryTextListener() {
-        @Override
-        public boolean onQueryTextSubmit(String query) {
-            return false;
-        }
-
-        @Override
-        public boolean onQueryTextChange(String newText) {
-
-            executor.execute(new Runnable() {
-                @Override
-                public void run() {
-                    List<MovieModel> list = roomDB.movieDao().searchByTitle(newText);
-                    handler.post(new Runnable() {
-                        public void run() {
-//                            if (list.size() > 0) {
-                            movieAdapter.updateList(list);
-                            Log.println(Log.ERROR, "searchByTitle: " + list.size(), "getAllMoviesFromServer");
-//                            }
-                        }
-                    });
-                }
-            });
-            return false;
-        }
-    };
-
-    private void loadAdapter() {
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        movieAdapter = new MovieAdapter(new ArrayList<>(0));
-        recyclerView.setAdapter(movieAdapter);
-
-        movieAdapter.setOnClickListener(new Interfaces.OnClickAdapter() {
-            @Override
-            public void onClickAdapterLintener(Object arg) {
-                MovieModel movie = (MovieModel) arg;
-
-                Intent intent = new Intent(getApplicationContext(), MoveDetail.class);
-                intent.putExtra(ACTIVITY_DATA_MOVIE_TITLE, movie.getTitle());
-                startActivity(intent);
-            }
-        });
-    }
-
 
     public void getAllMoviesFromServer() {
 
@@ -341,6 +349,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     movieList.addAll(list);
                 }
 
+                // Sort by
+                SortEnum sortConfig = PreferenceService.getInstance(getApplicationContext()).getSortConfig();
+                if (sortConfig == SortEnum.TITLE_ASC) {
+                    Collections.sort(movieList, MovieModel.titleAsc);
+                } else if (sortConfig == SortEnum.TITLE_DESC) {
+                    Collections.sort(movieList, MovieModel.titleDesc);
+                } else if (sortConfig == SortEnum.RATING_DESC) {
+                    Collections.sort(movieList, MovieModel.ratingDesc);
+                } else if (sortConfig == SortEnum.RATING_ASC) {
+                    Collections.sort(movieList, MovieModel.ratingAsc);
+//                } else {
+//                    Collections.sort(movieList, MovieModel.titleAsc);
+                }
+
                 handler.post(new Runnable() {
                     public void run() {
                         movieAdapter.updateList(movieList);
@@ -352,7 +374,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private boolean isNetworkConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
+        ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return connManager.getActiveNetworkInfo() != null && connManager.getActiveNetworkInfo().isConnected();
     }
 }

@@ -18,4 +18,8 @@ public class Interfaces {
     public interface OnNegativeButtonDialog {
         public void onNegativeListener();
     }
+
+    public interface OnClickListener {
+        public void onClickListenerCallback(Object arg);
+    }
 }
