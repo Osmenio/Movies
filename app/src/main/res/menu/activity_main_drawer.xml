@@ -3,7 +3,7 @@
     <item
         android:id="@+id/nav_home"
         android:icon="@mipmap/icon_home"
-        android:title="Home" />
+        android:title="Filmes" />
     <item
         android:id="@+id/nav_favorite"
         android:icon="@mipmap/icon_heart"

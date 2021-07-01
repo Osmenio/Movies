@@ -39,6 +39,7 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -84,6 +85,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //
     private UserDialog userDialog = null;
     private ProgressDialog progressDialog = null;
+
+    //
+    private Random random = new Random();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -322,6 +326,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void run() {
                 for (MovieModel movie : movies) {
                     try {
+                        // TODO: random rating - remove
+                       float rating = random.nextFloat() * 5;
+                        movie.setRating(rating);
                         roomDB.movieDao().persist(movie);
                     } catch (Exception throwables) {
                         Log.println(Log.ERROR, "Exception", "Movie already exists into db: " + movie.getTitle());

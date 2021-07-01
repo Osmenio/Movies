@@ -128,6 +128,7 @@ public class MoveDetail extends AppCompatActivity {
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 selectedMovie.setRating(rating);
                 updateMovie(selectedMovie);
+                Toast.makeText(getApplicationContext(), "RatingBar: " + rating, Toast.LENGTH_SHORT).show();
             }
         });
 
