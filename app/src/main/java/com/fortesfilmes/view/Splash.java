@@ -26,10 +26,6 @@ public class Splash extends AppCompatActivity {
         startThreadLaunch();
     }
 
-    /**
-     * @param
-     * @return
-     */
     private void startThreadLaunch() {
 
         Thread threadSplash = new Thread() {

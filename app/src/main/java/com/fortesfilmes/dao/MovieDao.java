@@ -8,7 +8,6 @@ import androidx.room.Update;
 
 import com.fortesfilmes.model.MovieModel;
 
-import java.sql.SQLException;
 import java.util.List;
 
 @Dao
@@ -25,9 +24,6 @@ public interface MovieDao {
 
     @Query("SELECT * FROM movie_model WHERE favorite = 1")// true = 1, false = 0
     List<MovieModel> findAllFavorite();
-
-//    @Query("SELECT * FROM movie_model WHERE favorite = 1")
-//    List<MovieModel> findAllFavorite();
 
     @Insert
     void persist(MovieModel movie) throws Exception;

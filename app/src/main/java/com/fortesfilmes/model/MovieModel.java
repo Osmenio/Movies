@@ -2,17 +2,12 @@ package com.fortesfilmes.model;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.util.Comparator;
-import java.util.Date;
 
 @Entity(tableName = "movie_model")
 public class MovieModel {
-
-//    @PrimaryKey(autoGenerate = true)
-//    public int id;
 
     @PrimaryKey(autoGenerate = false)
     @NonNull
@@ -30,15 +25,6 @@ public class MovieModel {
     private String poster;
     private boolean favorite;
     private float rating;
-
-//    @Ignore
-//    public MovieModel() {
-//    }
-
-
-//    public MovieModel(String title) {
-//        this.title = title;
-//    }
 
 
     public String getTitle() {
@@ -160,7 +146,6 @@ public class MovieModel {
     //
     public static Comparator<MovieModel> ratingDesc = new Comparator<MovieModel>() {
         public int compare(MovieModel movie1, MovieModel movie2) {
-//            return movie2.getRating().compareTo(movie1.getRating());
             return Float.compare(movie2.getRating(), movie1.getRating());
         }
     };

@@ -13,10 +13,6 @@ public class RestApiService {
 
     private static final String TAG = RestApiService.class.getSimpleName();
 
-    private static RestApiService INSTANCE;
-
-    //URL base do endpoint. Deve sempre terminar com /
-//    public static final String API_BASE_URL = "https://community-neutrino-currency-conversion.p.mashape.com/";
     public static final String API_BASE_URL = "https://private-b34167-rvmarvel.apiary-mock.com/";
 
     public static <S> S createService(Class<S> serviceInterface) {

@@ -67,8 +67,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private RecyclerView recyclerView;
     private SwipeRefreshLayout srlContainer;
 
-//    private Button btnClick;
-
     //
     private Toolbar toolbar;
     //
@@ -79,8 +77,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //
     List<MovieModel> movieList = null;
     private boolean isFavorite = false;
-    private boolean isSorted = false;
-//    private SortEnum selectedSort = SortEnum.NONE;
 
     //
     private UserDialog userDialog = null;
@@ -92,15 +88,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
         setContentView(R.layout.drawer_layout_main);
 
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.home);
-//        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
 
-//        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         // DrawerLayout
@@ -126,13 +119,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-//        btnClick = (Button) findViewById(R.id.bt_click);
-//        btnClick.setOnClickListener(view -> {
-////            List<MovieModel> listDb = roomDB.movieDao().findAll();
-////            Toast.makeText(getApplicationContext(), "listDb: " + listDb.size(), Toast.LENGTH_SHORT).show();
-//
-//        });
-
         checkData();
     }
 
@@ -142,9 +128,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         refreshDataView(null);
     }
 
-    /**
-     *
-     */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -178,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.nav_about:
-//                Toast.makeText(getApplicationContext(), "nav_about", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "About", Toast.LENGTH_SHORT).show();
                 break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -195,24 +178,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mSearchView.setOnQueryTextListener(searchListener);
         return true;
     }
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.menu_sort:
-//                if (isSorted) {
-//                    isSorted = false;
-//                    item.setIcon(R.drawable.icon_sort);
-//                } else {
-//                    isSorted = true;
-//                    item.setIcon(R.drawable.icon_sort_list);
-//                }
-//                PreferenceService.getInstance(getApplicationContext()).setSortConfig(isSorted);
-//                return true;
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//    }
 
     private SearchView.OnQueryTextListener searchListener = new SearchView.OnQueryTextListener() {
         @Override
@@ -367,8 +332,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Collections.sort(movieList, MovieModel.ratingDesc);
                 } else if (sortConfig == SortEnum.RATING_ASC) {
                     Collections.sort(movieList, MovieModel.ratingAsc);
-//                } else {
-//                    Collections.sort(movieList, MovieModel.titleAsc);
                 }
 
                 handler.post(new Runnable() {

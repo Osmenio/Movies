@@ -25,16 +25,6 @@ import com.squareup.picasso.Picasso;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-
-//● Consultar API (https://private-b34167-rvmarvel.apiary-mock.com/saga) e fazer a listagem dos 23 filmes da Marvel, que fazem parte da Infinity Saga, mostrando título, data de lançamento, gênero e miniatura do poster.
-//● Possibilidade de selecionar um filme e visualizar a sua versão completa, com poster expandido e com a descrição do filme.
-//● Possibilidade de filtrar um filme da lista.
-//● Permitir o acesso a lista de filmes quando o usuário estiver offline.
-//● Possibilidade de ordenar a lista do melhor para o pior e salvar a preferência.
-//● Outras ideias que você achar interessante. O desafio poderá ser realizado em Kotlina Java. Sugerimos utilizar componentes do Android Jetpack (ViewModel, LiveData, Room, etc.). O layout é livre, porém demonstrar boas noções de UI/UX será muito bom.
-//● Implementar testes unitários.
-
-
 public class MoveDetail extends AppCompatActivity {
 
     //
@@ -56,7 +46,6 @@ public class MoveDetail extends AppCompatActivity {
     private TextView tvWriter;
     private ImageView ivFavorite;
     private RatingBar rbRating;
-//    private FloatingActionButton fabFavorite;
 
     //
     private MovieModel selectedMovie = null;
@@ -111,7 +100,6 @@ public class MoveDetail extends AppCompatActivity {
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 selectedMovie.setRating(rating);
                 updateMovie(selectedMovie);
-//                Toast.makeText(getApplicationContext(), "RatingBar: " + rating, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -128,7 +116,6 @@ public class MoveDetail extends AppCompatActivity {
                 @Override
                 public void run() {
                     selectedMovie = roomDB.movieDao().findByTitle(movieTitle);
-//                    selectedMovie = findMovieByTitle(movieTitle);
                     handler.post(new Runnable() {
                         public void run() {
                             updateView(selectedMovie);
@@ -170,12 +157,12 @@ public class MoveDetail extends AppCompatActivity {
         });
     }
 
-    private void printMsg(String msg) {
-        handler.post(new Runnable() {
-            public void run() {
-                Log.println(Log.ERROR, "printMsg", msg);
-                Toast.makeText(getApplicationContext(), "printMsg: " + msg, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
+//    private void printMsg(String msg) {
+//        handler.post(new Runnable() {
+//            public void run() {
+//                Log.println(Log.ERROR, "printMsg", msg);
+//                Toast.makeText(getApplicationContext(), "printMsg: " + msg, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
 }

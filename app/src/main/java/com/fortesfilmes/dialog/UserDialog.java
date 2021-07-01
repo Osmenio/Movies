@@ -12,10 +12,6 @@ import com.fortesfilmes.interfaces.Interfaces;
 
 public class UserDialog {
 
-    public final static int DIALOG_TYPE_ALERT = 0;
-    public final static int DIALOG_TYPE_POSITIVE = 1;
-    public final static int DIALOG_TYPE_NEGATIVE = 2;
-
     private Context context;
 
     private int dialogType = 0;
@@ -32,10 +28,6 @@ public class UserDialog {
     private Interfaces.OnPositiveButtonDialog onPositiveListener = null;
     private Interfaces.OnNegativeButtonDialog onNegativListener = null;
 
-    /**
-     * @param
-     * @return
-     */
     public UserDialog(Context context) {
 
         this.context = context;
@@ -59,19 +51,7 @@ public class UserDialog {
         negativeBtn.setVisibility(View.INVISIBLE);
     }
 
-    /**
-     * @param
-     * @return
-     */
     public void show() {
-
-        if (dialogType == 0) {
-            imageView.setBackground(context.getResources().getDrawable(R.mipmap.icon_info));
-        } else if (dialogType == 1) {
-            imageView.setBackground(context.getResources().getDrawable(R.mipmap.icon_info));
-        } else if (dialogType == 2) {
-            imageView.setBackground(context.getResources().getDrawable(R.mipmap.icon_info));
-        }
         //
         dialog = helpBuilder.create();
         //
@@ -98,68 +78,36 @@ public class UserDialog {
         dialog.show();
     }
 
-    /**
-     * @param
-     * @return
-     */
     public void setOnPositiveButtonClickListener(Interfaces.OnPositiveButtonDialog listener) {
         this.onPositiveListener = listener;
     }
 
-    /**
-     * @param
-     * @return
-     */
     public void setOnNegativeButtonClickListener(Interfaces.OnNegativeButtonDialog listener) {
         this.onNegativListener = listener;
     }
 
-    /**
-     * @param
-     * @return
-     */
     public void setDialogType(int type) {
         dialogType = type;
     }
 
-    /**
-     * @param
-     * @return
-     */
     public void setTitleDialog(String msg) {
         titleDialog.setText(msg);
     }
 
-    /**
-     * @param
-     * @return
-     */
     public void setTextDialog(String msg) {
         textDialog.setText(msg);
     }
 
-    /**
-     * @param
-     * @return
-     */
     public void setLabelPositiveButton(String label) {
         positiveBtn.setText(label);
         positiveBtn.setVisibility(View.VISIBLE);
     }
 
-    /**
-     * @param
-     * @return
-     */
     public void setLabelNegativeButton(String label) {
         negativeBtn.setText(label);
         negativeBtn.setVisibility(View.VISIBLE);
     }
 
-    /**
-     * @param
-     * @return
-     */
     public void finish() {
         dialog.dismiss();
     }

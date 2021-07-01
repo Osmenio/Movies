@@ -19,7 +19,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieHolder> {
 
     private final List<MovieModel> movies;
 
-//    private View.OnClickListener onClickListener = null;
     private Interfaces.OnClickAdapter onClickListener = null;
 
     public MovieAdapter(ArrayList movies) {
@@ -29,10 +28,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieHolder> {
     @NonNull
     @Override
     public MovieHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//        return null;
         return new MovieHolder(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_list_movie, parent, false));
-
     }
 
     @Override
@@ -70,8 +67,5 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieHolder> {
 
     public void setOnClickListener(Interfaces.OnClickAdapter onClickListener) {
         this.onClickListener = onClickListener;
-//        if (onClickListener != null) {
-//            holder.frame.setOnClickListener(onClickListener);
-//        }
     }
 }

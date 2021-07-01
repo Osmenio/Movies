@@ -11,17 +11,11 @@ import android.widget.TextView;
 import com.fortesfilmes.R;
 import com.fortesfilmes.enumeration.SortEnum;
 import com.fortesfilmes.interfaces.Interfaces;
-import com.fortesfilmes.model.MovieModel;
-
-import java.util.Collections;
-
 
 public class SortDialog {
 
     private Context context;
 
-    //    private TextView negativeBtn;
-//    private TextView textDialog;
     private CheckBox cbTitleAsc;
     private CheckBox cbTitleDesc;
     private CheckBox cbRatingDesc;
@@ -49,9 +43,6 @@ public class SortDialog {
         cbRatingDesc = (CheckBox) inflatedView.findViewById(R.id.cb_rating_desc);
         cbRatingAsc = (CheckBox) inflatedView.findViewById(R.id.cb_rating_asc);
         btnApply = (TextView) inflatedView.findViewById(R.id.btn_apply);
-//        textDialog.setText("Info");
-//        negativeBtn = (TextView) inflatedView.findViewById(R.id.btn_cancel);
-//        negativeBtn.setVisibility(View.INVISIBLE);
     }
 
     public void show() {
@@ -73,7 +64,6 @@ public class SortDialog {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-//                    cbTitleAsc.setChecked(false);
                     cbTitleDesc.setChecked(false);
                     cbRatingDesc.setChecked(false);
                     cbRatingAsc.setChecked(false);
@@ -88,7 +78,6 @@ public class SortDialog {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     cbTitleAsc.setChecked(false);
-//                    cbTitleDesc.setChecked(false);
                     cbRatingDesc.setChecked(false);
                     cbRatingAsc.setChecked(false);
                     sortEnum = SortEnum.TITLE_DESC;
@@ -103,7 +92,6 @@ public class SortDialog {
                 if (isChecked) {
                     cbTitleAsc.setChecked(false);
                     cbTitleDesc.setChecked(false);
-//                    cbRatingDesc.setChecked(false);
                     cbRatingAsc.setChecked(false);
                     sortEnum = SortEnum.RATING_DESC;
                 } else {
@@ -118,7 +106,6 @@ public class SortDialog {
                     cbTitleAsc.setChecked(false);
                     cbTitleDesc.setChecked(false);
                     cbRatingDesc.setChecked(false);
-//                    cbRatingAsc.setChecked(false);
                     sortEnum = SortEnum.RATING_ASC;
                 } else {
                     sortEnum = SortEnum.NONE;
@@ -145,11 +132,6 @@ public class SortDialog {
     public void setSelectedSort(SortEnum sortEnum) {
         this.sortEnum = sortEnum;
     }
-//
-//    public void setLabelNegativeButton(String label) {
-//        negativeBtn.setText(label);
-//        negativeBtn.setVisibility(View.VISIBLE);
-//    }
 
     public void finish() {
         dialog.dismiss();

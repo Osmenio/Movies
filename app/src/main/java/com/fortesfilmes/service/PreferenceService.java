@@ -9,7 +9,6 @@ public class PreferenceService {
 
 
     private static PreferenceService INSTANCE;
-//    private static Context context;
 
     private static SharedPreferences sharedpreferences;
 

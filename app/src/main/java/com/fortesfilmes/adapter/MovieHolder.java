@@ -11,27 +11,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.fortesfilmes.R;
 
-import java.util.Date;
-
 public class MovieHolder extends RecyclerView.ViewHolder {
-
-//    public TextView title;
-//    public TextView description;
-//    public TextView releaseDate;
-//    public TextView genre;
-//    public ImageView cover;
 
     public FrameLayout frame;
     public TextView title;
     public TextView year;
-    //    public TextView rated;
-//    public TextView released;
-//    public TextView runtime;
-//    public TextView genre;
-//    public TextView director;
-//    public TextView writer;
-//    public TextView actors;
-//    public TextView plot;
     public ImageView poster;
     public RatingBar rbRating;
 
