@@ -7,40 +7,23 @@ import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RatingBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.fortesfilmes.R;
-import com.fortesfilmes.adapter.MovieAdapter;
-import com.fortesfilmes.interfaces.Interfaces;
 import com.fortesfilmes.model.MovieModel;
-import com.fortesfilmes.service.RestApiInterface;
-import com.fortesfilmes.service.RestApiService;
 import com.fortesfilmes.service.RoomDB;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 //● Consultar API (https://private-b34167-rvmarvel.apiary-mock.com/saga) e fazer a listagem dos 23 filmes da Marvel, que fazem parte da Infinity Saga, mostrando título, data de lançamento, gênero e miniatura do poster.
@@ -128,7 +111,7 @@ public class MoveDetail extends AppCompatActivity {
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 selectedMovie.setRating(rating);
                 updateMovie(selectedMovie);
-                Toast.makeText(getApplicationContext(), "RatingBar: " + rating, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "RatingBar: " + rating, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -155,12 +138,6 @@ public class MoveDetail extends AppCompatActivity {
             });
         }
     }
-
-//    public MovieModel findMovieByTitle(String title) {
-//        MovieModel movie = roomDB.movieDao().findByTitle(title);
-//        printMsg("movie: " + movie.getTitle());
-//        return movie;
-//    }
 
     private void updateView(MovieModel movie) {
 
@@ -202,11 +179,3 @@ public class MoveDetail extends AppCompatActivity {
         });
     }
 }
-
-//                    handler.post(new Runnable() {
-//                        public void run() {
-//                            movieAdapter.updateList(movieList);
-//                            Log.println(Log.ERROR, "MainActivity", "updateList");
-//                            Toast.makeText(getApplicationContext(), "movieList: " + movieList.size(), Toast.LENGTH_SHORT).show();
-//                        }
-//                    });

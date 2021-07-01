@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.home);
+//        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
 
 //        DrawerLayout drawer = findViewById(R.id.drawer_layout);

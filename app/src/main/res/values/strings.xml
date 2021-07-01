@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Fortes Filmes</string>
+    <string name="app_name">Fortes Movies</string>
     <string name="home">Filmes</string>
     <string name="detail">Informações</string>
     <string name="favorite">Favoritos</string>
