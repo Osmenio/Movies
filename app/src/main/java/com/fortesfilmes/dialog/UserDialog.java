@@ -14,7 +14,7 @@ public class UserDialog {
 
     private Context context;
 
-    private int dialogType = 0;
+//    private int dialogType = 0;
     private View imageView;
     private TextView positiveBtn;
     private TextView negativeBtn;
@@ -86,9 +86,9 @@ public class UserDialog {
         this.onNegativListener = listener;
     }
 
-    public void setDialogType(int type) {
-        dialogType = type;
-    }
+//    public void setDialogType(int type) {
+//        dialogType = type;
+//    }
 
     public void setTitleDialog(String msg) {
         titleDialog.setText(msg);

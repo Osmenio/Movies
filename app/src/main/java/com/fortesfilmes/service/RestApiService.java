@@ -11,13 +11,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RestApiService {
 
-    private static final String TAG = RestApiService.class.getSimpleName();
-
     public static final String API_BASE_URL = "https://private-b34167-rvmarvel.apiary-mock.com/";
 
-    public static <S> S createService(Class<S> serviceInterface) {
+    public static <S> S createService(Class<S> serviceInterface, String apiBaseUrl) {
 
-        //Instancia do interceptador das requisições
+        //
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
@@ -26,9 +24,10 @@ public class RestApiService {
 
         httpClient.addInterceptor(loggingInterceptor);
 
-        //Instância do retrofit
+        //
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_BASE_URL)
+                .baseUrl(apiBaseUrl)
+//                .baseUrl(API_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(new Gson()))
                 .client(httpClient.build())
                 .build();

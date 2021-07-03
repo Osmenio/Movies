@@ -1,15 +1,5 @@
 package com.fortesfilmes.view;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -21,6 +11,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.SearchView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.fortesfilmes.R;
 import com.fortesfilmes.adapter.MovieAdapter;
@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.nav_about:
-                Toast.makeText(getApplicationContext(), "About", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Sobre", Toast.LENGTH_SHORT).show();
                 break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -255,7 +255,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void getAllMoviesFromServer() {
 
-        RestApiInterface restApi = RestApiService.createService(RestApiInterface.class);
+        RestApiInterface restApi = RestApiService.createService(RestApiInterface.class, RestApiService.API_BASE_URL);
         Call<List<MovieModel>> call = restApi.getMovies();
         call.enqueue(new Callback<List<MovieModel>>() {
             @Override
