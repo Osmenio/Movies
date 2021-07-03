@@ -9,10 +9,4 @@
         app:actionViewClass="android.widget.SearchView"
         app:showAsAction="always" />
 
-<!--    <item-->
-<!--        android:id="@+id/menu_sort"-->
-<!--        android:icon="@drawable/icon_sort"-->
-<!--        android:title="Search"-->
-<!--        app:showAsAction="always" />-->
-
 </menu>

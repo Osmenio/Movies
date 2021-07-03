@@ -96,7 +96,5 @@
             android:textColor="@color/black"
             android:textSize="@dimen/size_text_button"
             android:textStyle="italic|bold" />
-
     </LinearLayout>
-
 </LinearLayout>
