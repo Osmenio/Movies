@@ -92,7 +92,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="5dp"
-            android:text="Aplicar"
+            android:text="@string/apply"
             android:textColor="@color/black"
             android:textSize="@dimen/size_text_button"
             android:textStyle="italic|bold" />

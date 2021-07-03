@@ -25,4 +25,5 @@
     <string name="titleDesc">Title: Z -> A</string>
     <string name="ratingAsc">Rating Asc</string>
     <string name="ratingDesc">Rating Desc</string>
+    <string name="apply">Apply</string>
 </resources>
