@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="Ordenar"
+            android:text="@string/sortby"
             android:textColor="@color/black"
             android:textSize="@dimen/size_text_title"
             android:textStyle="bold" />
@@ -45,16 +45,12 @@
         android:layout_marginLeft="10dp"
         android:orientation="vertical">
 
-        <!--        <RadioGroup-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content">-->
-
         <CheckBox
             android:id="@+id/cb_title_asc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:buttonTint="@color/gray_dark"
-            android:text="Nome: A -> Z"
+            android:text="@string/titleAsc"
             android:textColor="@color/gray_dark" />
 
         <CheckBox
@@ -62,7 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:buttonTint="@color/gray_dark"
-            android:text="Nome: Z -> A"
+            android:text="@string/titleDesc"
             android:textColor="@color/gray_dark" />
 
         <CheckBox
@@ -70,7 +66,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:buttonTint="@color/gray_dark"
-            android:text="Maior avaliação"
+            android:text="@string/ratingDesc"
             android:textColor="@color/gray_dark" />
 
         <CheckBox
@@ -78,9 +74,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:buttonTint="@color/gray_dark"
-            android:text="Menor avaliação"
+            android:text="@string/ratingAsc"
             android:textColor="@color/gray_dark" />
-        <!--        </RadioGroup>-->
 
     </LinearLayout>
 

@@ -3,17 +3,17 @@
     <item
         android:id="@+id/nav_home"
         android:icon="@mipmap/icon_home"
-        android:title="Filmes" />
+        android:title="@string/home" />
     <item
         android:id="@+id/nav_favorite"
         android:icon="@mipmap/icon_heart"
-        android:title="Favoritos" />
+        android:title="@string/favorite" />
     <item
         android:id="@+id/nav_sort"
         android:icon="@drawable/icon_sort_list"
-        android:title="Ordenar" />
+        android:title="@string/sortby" />
     <item
         android:id="@+id/nav_about"
         android:icon="@mipmap/icon_info"
-        android:title="Sobre" />
+        android:title="@string/about" />
 </menu>

@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.nav_about:
-                Toast.makeText(getApplicationContext(), "Sobre", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "About", Toast.LENGTH_SHORT).show();
                 break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -174,8 +174,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
         //
-        SearchView mSearchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
-        mSearchView.setOnQueryTextListener(searchListener);
+        SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+        searchView.setOnQueryTextListener(searchListener);
         return true;
     }
 
@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     handler.post(new Runnable() {
                         public void run() {
                             movieAdapter.updateList(list);
-                            Log.println(Log.ERROR, "searchByTitle: " + list.size(), "getAllMoviesFromServer");
+//                            Log.println(Log.ERROR, "searchByTitle: " + list.size(), "getAllMoviesFromServer");
                         }
                     });
                 }
@@ -262,26 +262,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onResponse(Call<List<MovieModel>> call, Response<List<MovieModel>> response) {
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
-                        Log.println(Log.ERROR, "getAllMoviesFromServer", "response.body()");
                         List<MovieModel> movieList = response.body();
-                        //
                         persistAllMovies(movieList);
-                        //
                         refreshDataView(movieList);
                         progressDialog.finish();
                     } else {
-//                        movieList = null;
-                        Toast.makeText(getApplicationContext(), "Resposta nula do servidor", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Error: Null response from server", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getApplicationContext(), "Resposta não foi sucesso", Toast.LENGTH_SHORT).show();
-                    ResponseBody errorBody = response.errorBody();
+                    Toast.makeText(getApplicationContext(), "Error: Fail response from server", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<MovieModel>> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), "Erro na chamada ao servidor", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Error: Server not responding", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -296,9 +291,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                        float rating = random.nextFloat() * 5;
                         movie.setRating(rating);
                         roomDB.movieDao().persist(movie);
-                    } catch (Exception throwables) {
-                        Log.println(Log.ERROR, "Exception", "Movie already exists into db: " + movie.getTitle());
-//                        throwables.printStackTrace();
+                    } catch (Exception e) {
+//                        e.printStackTrace();
                     }
                 }
             }
@@ -312,10 +306,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (list == null) {
                     if (isFavorite) {
                         movieList = roomDB.movieDao().findAllFavorite();
-                        Log.println(Log.ERROR, "refreshDataView: " + movieList.size(), "findAllFavorite");
                     } else {
                         movieList = roomDB.movieDao().findAll();
-                        Log.println(Log.ERROR, "refreshDataView: " + movieList.size(), "findAll");
                     }
                 } else {
                     movieList.clear();
@@ -337,7 +329,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 handler.post(new Runnable() {
                     public void run() {
                         movieAdapter.updateList(movieList);
-                        Log.println(Log.ERROR, "refreshDataView: " + movieList.size(), "updateList");
                     }
                 });
             }

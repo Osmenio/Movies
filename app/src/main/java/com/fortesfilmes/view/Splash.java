@@ -12,7 +12,6 @@ import com.fortesfilmes.R;
 
 public class Splash extends AppCompatActivity {
 
-    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +21,6 @@ public class Splash extends AppCompatActivity {
         // keep screen portrait
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        context = this;
         startThreadLaunch();
     }
 
@@ -35,7 +33,7 @@ public class Splash extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } finally {
-                    Intent intent = new Intent(context, MainActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
                 }
             }

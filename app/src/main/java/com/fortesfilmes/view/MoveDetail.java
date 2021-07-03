@@ -5,7 +5,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -26,9 +25,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class MoveDetail extends AppCompatActivity {
-
-    //
-    private Toolbar toolbar;
 
     //
     private RoomDB roomDB;
@@ -84,11 +80,11 @@ public class MoveDetail extends AppCompatActivity {
                 if (selectedMovie.isFavorite()) {
                     selectedMovie.setFavorite(false);
                     ivFavorite.setImageResource(R.mipmap.icon_heart);
-                    Toast.makeText(getApplicationContext(), "Filme removido dos favoritos", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Removed movie from favorites", Toast.LENGTH_SHORT).show();
                 } else {
                     selectedMovie.setFavorite(true);
                     ivFavorite.setImageResource(R.mipmap.icon_heart_red);
-                    Toast.makeText(getApplicationContext(), "Filme adicionado aos favoritos", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Added movie to favorites", Toast.LENGTH_SHORT).show();
                 }
                 //
                 updateMovie(selectedMovie);
@@ -156,13 +152,4 @@ public class MoveDetail extends AppCompatActivity {
             }
         });
     }
-
-//    private void printMsg(String msg) {
-//        handler.post(new Runnable() {
-//            public void run() {
-//                Log.println(Log.ERROR, "printMsg", msg);
-//                Toast.makeText(getApplicationContext(), "printMsg: " + msg, Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
 }

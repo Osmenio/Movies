@@ -1,20 +1,28 @@
 <resources>
+    <string name="color_primary">#C62828</string>
+
     <string name="app_name">Fortes Movies</string>
-    <string name="home">Filmes</string>
-    <string name="detail">Informações</string>
-    <string name="favorite">Favoritos</string>
+    <string name="home">Movies</string>
+    <string name="detail">Details</string>
+    <string name="favorite">Favorites</string>
+    <string name="sortby">Sort by</string>
+    <string name="about">About</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <!--    Details activity-->
+    <string name="title">Title:</string>
+    <string name="desc">Overview:</string>
+    <string name="released">Release Date:</string>
+    <string name="runtime">Runtime:</string>
+    <string name="genre">Genre:</string>
+    <string name="director">Director:</string>
+    <string name="writer">Writer:</string>
 
-    <string name="color_primary">#C62828</string>
-
-    <string name="title">Título:</string>
-    <string name="desc">Sinópse:</string>
-    <string name="released">Data de lançamento:</string>
-    <string name="runtime">Duração:</string>
-    <string name="genre">Gênero:</string>
-    <string name="director">Diretor:</string>
-    <string name="writer">Escritor:</string>
+    <!--    Sort by dialog-->
+    <string name="titleAsc">Title: A -> Z</string>
+    <string name="titleDesc">Title: Z -> A</string>
+    <string name="ratingAsc">Rating Asc</string>
+    <string name="ratingDesc">Rating Desc</string>
 </resources>
